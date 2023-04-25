@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="30eca376-26da-4afc-9f6d-b7bf5f90bb2b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/class/managerFunctions.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cselibrary.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/backUpData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/database.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/functiones/pushNotifications.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/functiones/shamsi.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/functiones/validate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/functiones/validateEmail.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-    </list>
+    <list default="true" id="30eca376-26da-4afc-9f6d-b7bf5f90bb2b" name="Changes" comment="start book library api" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -64,8 +49,16 @@
       <updated>1682419936864</updated>
       <workItem from="1682419939471" duration="8200000" />
       <workItem from="1682437934499" duration="9000" />
-      <workItem from="1682446080470" duration="2420000" />
+      <workItem from="1682446080470" duration="3055000" />
     </task>
+    <task id="LOCAL-00001" summary="start book library api">
+      <created>1682449517151</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1682449517152</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -81,6 +74,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="start book library api" />
+    <option name="LAST_COMMIT_MESSAGE" value="start book library api" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
