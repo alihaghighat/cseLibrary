@@ -41,6 +41,24 @@ class managerFunctions {
         }
 
     }
+    async categoryDetaile(id) {
+        const categoryDetaile = await getRecords("tblcategory","id=? and active='active' ORDER by id asc ",[id]);
+        if(categoryDetaile!=false){
+            return categoryDetaile;
+        }else{
+            return [];
+        }
+
+    }
+    async subCategory(id) {
+        const subCategory = await getRecords("tblcategory","subId=? and active='active' ORDER by id asc ",[id]);
+        if(subCategory!=false){
+            return subCategory;
+        }else{
+            return [];
+        }
+
+    }
     async getSubMenus(subId) {
         const menu = await getRecords("tblManagerMenu","subId=? ORDER by ordering asc ",[subId]);
         if(menu!=false){
@@ -58,6 +76,30 @@ class managerFunctions {
             return false;
         }
 
+    }
+    async addCategory(items){
+        const addCategory=await addRecords("tblcategory",items);
+        if(addCategory.affectedRows!=0){
+            return addCategory.insertId;
+        }else{
+            return false;
+        }
+    }
+    async addBook(items){
+        const addCategory=await addRecords("addBook",items);
+        if(addCategory.affectedRows!=0){
+            return addCategory.insertId;
+        }else{
+            return false;
+        }
+    }
+    async editeCategory(items, id){
+        const editeCategory=await updateRecords("tblcategory",items,"id=?",[id]);
+        if(editeCategory.affectedRows!=0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

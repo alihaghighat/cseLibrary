@@ -114,6 +114,141 @@ app.get('/manager/menu/:token',async function (req, res) {
 
 
 })
+app.post('/manager/addCategory',async function (req, res) {
+    const token = req.body.token;
+    const name = req.body.name;
+    const root = req.body.root;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const addCategory=await managerFunctions.addCategory({
+            name:name,
+            subId:root,
+            active:'active'
+        });
+        if(addCategory!=false){
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/addBook',async function (req, res) {
+    const token = req.body.token;
+    const name = req.body.name;
+    const category = req.body.category;
+    const comod = req.body.comod;
+    const ghafase = req.body.ghafase;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const addBook=await managerFunctions.addBook({
+            name:name,
+            comode:comod,
+            category:category,
+            ghafase:ghafase,
+            active:'active'
+        });
+        if(addBook!=false){
+
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/editeCategory',async function (req, res) {
+    const token = req.body.token;
+    const name = req.body.name;
+    const root = req.body.root;
+    const id = req.body.id;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const editeCategory=await managerFunctions.editeCategory({
+            name:name,
+            subId:root,
+            active:'active'
+        },id);
+        if(editeCategory!=false){
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/deactiveCategory',async function (req, res) {
+    const token = req.body.token;
+    const id = req.body.id;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const editeCategory=await managerFunctions.editeCategory({
+            active:'notActive'
+        },id);
+        if(editeCategory!=false){
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
 app.post('/manager/rootCategory',async function (req, res) {
     const token = req.body.token;
     const manager = await managerFunctions.getMnagerByToken(token);
@@ -123,6 +258,60 @@ app.post('/manager/rootCategory',async function (req, res) {
         res.send(JSON.stringify({
             status: 200,
             data:rootCategory,
+            description: "موفقیت آمیز"
+        }));
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/categoryList',async function (req, res) {
+    const token = req.body.token;
+    const limit= req.body.limit;
+    const page=req.body.page;
+    const keyword= req.body.keyword;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const startLimit=(parseInt(page)-1)*parseInt(limit);
+        const endLimit=startLimit+parseInt(limit);
+        const rootCategory=await managerFunctions.rootCategory();
+        for(let item in rootCategory){
+            const temp=rootCategory[item];
+            const subcategory=await managerFunctions.subCategory(temp.id);
+            temp['subcategory']=subcategory;
+        }
+
+        res.send(JSON.stringify({
+            status: 200,
+            data:rootCategory.slice(startLimit,endLimit),
+            count:rootCategory.length,
+            description: "موفقیت آمیز"
+        }));
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/categoryDetaile',async function (req, res) {
+    const token = req.body.token;
+    const id= req.body.id;
+
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+
+        const categoryDetaile=await managerFunctions.categoryDetaile(id);
+        res.send(JSON.stringify({
+            status: 200,
+            data:categoryDetaile,
+
             description: "موفقیت آمیز"
         }));
     } else {
