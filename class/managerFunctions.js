@@ -77,12 +77,39 @@ class managerFunctions {
         }
 
     }
+    async userList(key) {
+        const userList = await getRecords("tblUser","name like CONCAT( '%',?,'%') Or lastName like CONCAT( '%',?,'%') Or sNumber like CONCAT( '%',?,'%')  ORDER by id asc ",[key,key,key]);
+        if(userList!=false){
+            return userList;
+        }else{
+            return [];
+        }
+
+    }
     async bookDetaile(id) {
         const bookDetaile = await getRecords("tblBook","id=?",[id]);
         if(bookDetaile!=false){
             return bookDetaile;
         }else{
             return [];
+        }
+
+    }
+    async userDetaileF(id) {
+        const userDetaile = await getRecords("tblUser","id=?",[id]);
+        if(userDetaile!=false){
+            return userDetaile;
+        }else{
+            return [];
+        }
+
+    }
+    async userDetaile(sNumber) {
+        const userDetaile = await getRecords("tblUser","sNumber=?",[sNumber]);
+        if(userDetaile!=false && userDetaile.length>0){
+            return userDetaile[0];
+        }else{
+            return false;
         }
 
     }
@@ -111,6 +138,14 @@ class managerFunctions {
             return false;
         }
     }
+    async addUser(items){
+        const addUser=await addRecords("tblUser",items);
+        if(addUser.affectedRows!=0){
+            return addUser.insertId;
+        }else{
+            return false;
+        }
+    }
     async editeCategory(items, id){
         const editeCategory=await updateRecords("tblcategory",items,"id=?",[id]);
         if(editeCategory.affectedRows!=0){
@@ -122,6 +157,14 @@ class managerFunctions {
     async editeBook(items, id){
         const editeBook=await updateRecords("tblBook",items,"id=?",[id]);
         if(editeBook.affectedRows!=0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    async editeUser(items, id){
+        const editeUser=await updateRecords("tblUser",items,"id=?",[id]);
+        if(editeUser.affectedRows!=0){
             return true;
         }else{
             return false;

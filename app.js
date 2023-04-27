@@ -472,7 +472,203 @@ app.post('/manager/editeBook',async function (req, res) {
 
 
 })
+app.post('/manager/addUser',async function (req, res) {
+    const token = req.body.token;
+    const name = req.body.name;
+    const lastName = req.body.lastName;
+    const phone = req.body.phone;
+    const sNumber = req.body.sNumber;
+    const grade = req.body.grade;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const userDetaile=await managerFunctions.userDetaile(sNumber);
 
+        if(userDetaile==false){
+            const addUser=await managerFunctions.addUser({
+                name:name,
+                lastName:lastName,
+                phone:phone,
+                sNumber:sNumber,
+                grade:grade,
+                status:'active'
+            });
+            if(addUser!=false){
+
+                res.send(JSON.stringify({
+                    status: 200,
+                    description: "موفقیت آمیز"
+                }));
+            }else{
+                res.send(JSON.stringify({
+                    status: 108,
+                    description: "عدم ثبت اطلاعات"
+                }));
+            }
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "این کاربر(کد دانشجویی) قبلا ثبت شده "
+            }));
+        }
+
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/userList',async function (req, res) {
+    const token = req.body.token;
+    const limit= req.body.limit;
+    const page=req.body.page;
+    const keyword= req.body.keyword;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const startLimit=(parseInt(page)-1)*parseInt(limit);
+        const endLimit=startLimit+parseInt(limit);
+        const userList= await managerFunctions.userList(keyword);
+        res.send(JSON.stringify({
+            status: 200,
+            data:userList.slice(startLimit,endLimit),
+            count:userList.length,
+            description: "موفقیت آمیز"
+        }));
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/deactiveUser',async function (req, res) {
+    const token = req.body.token;
+    const id = req.body.id;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const editeUser=await managerFunctions.editeUser({
+            status:'notActive'
+        },id);
+        if(editeUser!=false){
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/activeUser',async function (req, res) {
+    const token = req.body.token;
+    const id = req.body.id;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const editeUser=await managerFunctions.editeUser({
+            status:'active'
+        },id);
+        if(editeUser!=false){
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/userDetaile',async function (req, res) {
+    const token = req.body.token;
+    const id= req.body.id;
+
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const userDetaile= await managerFunctions.userDetaileF(id);
+
+        res.send(JSON.stringify({
+            status: 200,
+            data:userDetaile,
+            description: "موفقیت آمیز"
+        }));
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/editeUser',async function (req, res) {
+    const token = req.body.token;
+    const name = req.body.name;
+    const id = req.body.id;
+    const lastName = req.body.lastName;
+    const phone = req.body.phone;
+    const sNumber = req.body.sNumber;
+    const grade = req.body.grade;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const editeUser=await managerFunctions.editeUser({
+            name:name,
+            lastName:lastName,
+            phone:phone,
+            sNumber:sNumber,
+            grade:grade
+        },id);
+        if(editeUser!=false){
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
 //end  manager
 
 
