@@ -68,6 +68,24 @@ class managerFunctions {
         }
 
     }
+    async books(key) {
+        const books = await getRecords("tblBook","name like CONCAT( '%',?,'%') ORDER by id asc ",[key]);
+        if(books!=false){
+            return books;
+        }else{
+            return [];
+        }
+
+    }
+    async bookDetaile(id) {
+        const bookDetaile = await getRecords("tblBook","id=?",[id]);
+        if(bookDetaile!=false){
+            return bookDetaile;
+        }else{
+            return [];
+        }
+
+    }
     async getMnagerByToken(token) {
         const manager = await getRecords("tblmanager","token=? ",[token]);
         if(manager!=false){
@@ -86,7 +104,7 @@ class managerFunctions {
         }
     }
     async addBook(items){
-        const addCategory=await addRecords("addBook",items);
+        const addCategory=await addRecords("tblBook",items);
         if(addCategory.affectedRows!=0){
             return addCategory.insertId;
         }else{
@@ -96,6 +114,14 @@ class managerFunctions {
     async editeCategory(items, id){
         const editeCategory=await updateRecords("tblcategory",items,"id=?",[id]);
         if(editeCategory.affectedRows!=0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    async editeBook(items, id){
+        const editeBook=await updateRecords("tblBook",items,"id=?",[id]);
+        if(editeBook.affectedRows!=0){
             return true;
         }else{
             return false;

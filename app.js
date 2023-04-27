@@ -160,7 +160,7 @@ app.post('/manager/addBook',async function (req, res) {
             comode:comod,
             category:category,
             ghafase:ghafase,
-            active:'active'
+            status:'active'
         });
         if(addBook!=false){
 
@@ -314,6 +314,155 @@ app.post('/manager/categoryDetaile',async function (req, res) {
 
             description: "موفقیت آمیز"
         }));
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/bookList',async function (req, res) {
+    const token = req.body.token;
+    const limit= req.body.limit;
+    const page=req.body.page;
+    const keyword= req.body.keyword;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const startLimit=(parseInt(page)-1)*parseInt(limit);
+        const endLimit=startLimit+parseInt(limit);
+        const books= await managerFunctions.books(keyword);
+        for(let item in books){
+            let temp=books[item];
+            let categortD=await managerFunctions.categoryDetaile(books[item].category);
+            temp['categoryName']=categortD[0].name;
+        }
+        res.send(JSON.stringify({
+            status: 200,
+            data:books.slice(startLimit,endLimit),
+            count:books.length,
+            description: "موفقیت آمیز"
+        }));
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/bookDetaile',async function (req, res) {
+    const token = req.body.token;
+    const id= req.body.id;
+
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const books= await managerFunctions.bookDetaile(id);
+
+        res.send(JSON.stringify({
+            status: 200,
+            data:books,
+            description: "موفقیت آمیز"
+        }));
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/deactiveBook',async function (req, res) {
+    const token = req.body.token;
+    const id = req.body.id;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const editeBook=await managerFunctions.editeBook({
+            status:'notActive'
+        },id);
+        if(editeBook!=false){
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/activeBook',async function (req, res) {
+    const token = req.body.token;
+    const id = req.body.id;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const editeBook=await managerFunctions.editeBook({
+            status:'active'
+        },id);
+        if(editeBook!=false){
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/editeBook',async function (req, res) {
+    const token = req.body.token;
+    const name = req.body.name;
+    const id = req.body.id;
+    const category = req.body.category;
+    const comod = req.body.comod;
+    const ghafase = req.body.ghafase;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const editeBook=await managerFunctions.editeBook({
+            name:name,
+            comode:comod,
+            category:category,
+            ghafase:ghafase
+        },id);
+        if(editeBook!=false){
+            res.send(JSON.stringify({
+                status: 200,
+                description: "موفقیت آمیز"
+            }));
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "عدم ثبت اطلاعات"
+            }));
+        }
+
+
     } else {
         res.send(JSON.stringify({
             status: 102,
