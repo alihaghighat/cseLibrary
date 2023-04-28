@@ -86,6 +86,15 @@ class managerFunctions {
         }
 
     }
+    async loanDetaile(id) {
+        const bookDetaile = await getRecords("tblLoan","id=?",[id]);
+        if(bookDetaile!=false){
+            return bookDetaile;
+        }else{
+            return [];
+        }
+
+    }
     async bookDetaile(id) {
         const bookDetaile = await getRecords("tblBook","id=?",[id]);
         if(bookDetaile!=false){
@@ -99,6 +108,24 @@ class managerFunctions {
         const userDetaile = await getRecords("tblUser","id=?",[id]);
         if(userDetaile!=false){
             return userDetaile;
+        }else{
+            return [];
+        }
+
+    }
+    async historyBook(id) {
+        const historyBook = await getRecords("tblLoan","bookId=?",[id]);
+        if(historyBook!=false){
+            return historyBook;
+        }else{
+            return [];
+        }
+
+    }
+    async historyBookAll() {
+        const historyBookAll = await getRecords("tblLoan","status='active'",[]);
+        if(historyBookAll!=false){
+            return historyBook;
         }else{
             return [];
         }
@@ -138,6 +165,14 @@ class managerFunctions {
             return false;
         }
     }
+    async addLoan(items){
+        const addLoan=await addRecords("tblLoan",items);
+        if(addLoan.affectedRows!=0){
+            return addLoan.insertId;
+        }else{
+            return false;
+        }
+    }
     async addUser(items){
         const addUser=await addRecords("tblUser",items);
         if(addUser.affectedRows!=0){
@@ -157,6 +192,14 @@ class managerFunctions {
     async editeBook(items, id){
         const editeBook=await updateRecords("tblBook",items,"id=?",[id]);
         if(editeBook.affectedRows!=0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    async editeLoad(items, id){
+        const editeLoad=await updateRecords("tblLoan",items,"id=?",[id]);
+        if(editeLoad.affectedRows!=0){
             return true;
         }else{
             return false;

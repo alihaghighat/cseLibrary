@@ -3,12 +3,13 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const md5 = require('md5');
-
+const request = require('request');
 
 // import class
 const {ValidateEmail,ValidatePhone,ValidateNationalCode}=require('./functiones/validate');
 
 const {getRecords, updateRecords, runSql, deleteRecords} = require("./database/database");
+const {gregorian_to_jalali} = require("./functiones/shamsi.js");
 
 const managerClass=require("./class/managerFunctions");
 const managerFunctions=new managerClass();
@@ -669,8 +670,192 @@ app.post('/manager/editeUser',async function (req, res) {
 
 
 })
-//end  manager
+app.post('/manager/addLoan',async function (req, res) {
+    const token = req.body.token;
+    const id = req.body.id;
+    const amount = req.body.amount;
+    const userId = req.body.userId;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const bookDetaile=await managerFunctions.bookDetaile(id);
+        if(bookDetaile!=false){
+            if(bookDetaile[0].status=='loaned'){
+                res.send(JSON.stringify({
+                    status: 108,
+                    description: "این کتاب در وضعیت امانت می باشد."
+                }));
+            }else{
+                const ndt = new Date();
+                let endData = new Date(ndt.getTime());
+                endData.setDate(ndt.getDate() + (amount*30));
+                const add=managerFunctions.addLoan({
+                    userId:userId,
+                    bookId:id,
+                    status:'active',
+                    endData:endData
 
+                });
+                if(add!=false){
+                    const uodate=await managerFunctions.editeBook({
+                        status:'loaned'
+                    },id)
+                    res.send(JSON.stringify({
+                        status: 200,
+                        description: "موفقیت آمیز"
+                    }));
+                }else{
+                    res.send(JSON.stringify({
+                        status: 108,
+                        description: "عدم ثبت اطلاعات"
+                    }));
+                }
+            }
+
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "این کاربر(کد دانشجویی) قبلا ثبت شده "
+            }));
+        }
+
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/historyBook',async function (req, res) {
+    const token = req.body.token;
+    const limit= req.body.limit;
+    const page=req.body.page;
+    const keyword= req.body.keyword;
+    const id= req.body.id;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const startLimit=(parseInt(page)-1)*parseInt(limit);
+        const endLimit=startLimit+parseInt(limit);
+        const historyBook= await managerFunctions.historyBook(id);
+        for(let item in historyBook){
+            const ndt=new Date(historyBook[item].startDate);
+            const g_y=ndt.getFullYear();
+            const g_m=ndt.getMonth()+1;
+            const  g_d=ndt.getDate();
+            const shamsi=gregorian_to_jalali(g_y,g_m,g_d);
+            let temp=historyBook[item];
+            let userDetaileF=await managerFunctions.userDetaileF(historyBook[item].userId);
+            temp['user']=userDetaileF[0].name+' '+userDetaileF[0].lastName+' ( '+userDetaileF[0].sNumber+' ) '+userDetaileF[0].phone;
+            temp['startDateFa']=shamsi[0]+'-'+shamsi[1]+'-'+shamsi[2];
+            const date1 = new Date();
+            const date2 = new Date(historyBook[item].endData);
+            const diffTime =date2 - date1;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            temp['diffDays']=diffDays;
+        }
+        res.send(JSON.stringify({
+            status: 200,
+            data:historyBook.slice(startLimit,endLimit),
+            count:historyBook.length,
+            description: "موفقیت آمیز"
+        }));
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+app.post('/manager/addRetrun',async function (req, res) {
+    const token = req.body.token;
+    const id = req.body.id;
+    const descreptions = req.body.descreptions;
+    const manager = await managerFunctions.getMnagerByToken(token);
+    if (manager != false) {
+        const loanDetaile=await managerFunctions.loanDetaile(id);
+        if(loanDetaile!=false){
+
+                const add=managerFunctions.editeLoad({
+                    status:'notActive',
+                    descreptions:descreptions
+
+                },id);
+                if(add!=false){
+                    const uodate=await managerFunctions.editeBook({
+                        status:'active'
+                    },loanDetaile[0].bookId)
+                    res.send(JSON.stringify({
+                        status: 200,
+                        description: "موفقیت آمیز"
+                    }));
+                }else{
+                    res.send(JSON.stringify({
+                        status: 108,
+                        description: "عدم ثبت اطلاعات"
+                    }));
+                }
+
+
+        }else{
+            res.send(JSON.stringify({
+                status: 108,
+                description: "این کاربر(کد دانشجویی) قبلا ثبت شده "
+            }));
+        }
+
+
+
+    } else {
+        res.send(JSON.stringify({
+            status: 102,
+            description: "نشست شما به پایان رسیده است."
+        }));
+    }
+
+
+})
+//end  manager
+setInterval(async function () {
+    const historyBook = await managerFunctions.historyBookAll();
+    for (let item in historyBook) {
+        const date1 = new Date();
+        const date2 = new Date(historyBook[item].endData);
+        const diffTime = date2 - date1;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        let userDetaileF=await managerFunctions.userDetaileF(historyBook[item].userId);
+       if(diffDays==1){
+           let clientServerOptions = {
+               uri: 'http://sms.parsgreen.ir/Apiv2/Message/SendOtp',
+               body: JSON.stringify({
+                   "Mobile": userDetaileF[0].phone,
+                   "SmsCode": `${otp}`,
+                   "TemplateID": 6,
+                   "AddName": true
+               }),
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Authorization':"BASIC APIKEY:A334BFFD-A038-4D24-B039-0D75F9C78338"
+               }
+           }
+           request(clientServerOptions, async function (error, response) {
+               const resP=JSON.parse(response.body);
+               if (resP.R_Success == true) {
+                   console.log("ok");
+
+               } else {
+                   console.log("error");
+               }
+
+           });
+       }
+    }
+}, 8.64e+7);
 
 //end user
 server.listen(port, () => {
