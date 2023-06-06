@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="30eca376-26da-4afc-9f6d-b7bf5f90bb2b" name="Changes" comment="add user api">
+    <list default="true" id="30eca376-26da-4afc-9f6d-b7bf5f90bb2b" name="Changes" comment="add loan book api">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/class/managerFunctions.js" beforeDir="false" afterPath="$PROJECT_DIR$/class/managerFunctions.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +59,16 @@
       <workItem from="1682597939321" duration="4592000" />
       <workItem from="1682615256128" duration="6414000" />
       <workItem from="1682699131909" duration="1006000" />
-      <workItem from="1682701356060" duration="4371000" />
+      <workItem from="1682701356060" duration="4739000" />
+      <workItem from="1682747505931" duration="9000" />
+      <workItem from="1684576316485" duration="6158000" />
+      <workItem from="1684591622793" duration="598000" />
+      <workItem from="1684610755020" duration="6000" />
+      <workItem from="1684701438675" duration="6000" />
+      <workItem from="1684828681488" duration="45000" />
+      <workItem from="1685814200641" duration="522000" />
+      <workItem from="1685893421901" duration="16000" />
+      <workItem from="1686077340748" duration="284000" />
     </task>
     <task id="LOCAL-00001" summary="start book library api">
       <created>1682449517151</created>
@@ -97,7 +105,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682622596279</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add loan book api">
+      <created>1682708940822</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1682708940822</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -119,14 +134,15 @@
     <MESSAGE value="add category api" />
     <MESSAGE value="add book api" />
     <MESSAGE value="add user api" />
-    <option name="LAST_COMMIT_MESSAGE" value="add user api" />
+    <MESSAGE value="add loan book api" />
+    <option name="LAST_COMMIT_MESSAGE" value="add loan book api" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app.js</url>
-          <line>632</line>
+          <line>634</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

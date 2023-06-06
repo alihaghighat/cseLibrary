@@ -4,11 +4,9 @@ const http = require('http');
 const server = http.createServer(app);
 const md5 = require('md5');
 const request = require('request');
+const couchbase = require("couchbase");
 
-// import class
-const {ValidateEmail,ValidatePhone,ValidateNationalCode}=require('./functiones/validate');
 
-const {getRecords, updateRecords, runSql, deleteRecords} = require("./database/database");
 const {gregorian_to_jalali} = require("./functiones/shamsi.js");
 
 const managerClass=require("./class/managerFunctions");
@@ -330,6 +328,7 @@ app.post('/manager/bookList',async function (req, res) {
     const page=req.body.page;
     const keyword= req.body.keyword;
     const manager = await managerFunctions.getMnagerByToken(token);
+
     if (manager != false) {
         const startLimit=(parseInt(page)-1)*parseInt(limit);
         const endLimit=startLimit+parseInt(limit);
@@ -337,7 +336,10 @@ app.post('/manager/bookList',async function (req, res) {
         for(let item in books){
             let temp=books[item];
             let categortD=await managerFunctions.categoryDetaile(books[item].category);
-            temp['categoryName']=categortD[0].name;
+            if(categortD!=false){
+                temp['categoryName']=categortD[0].name;
+            }
+
         }
         res.send(JSON.stringify({
             status: 200,
@@ -819,6 +821,11 @@ app.post('/manager/addRetrun',async function (req, res) {
 
 
 })
+app.get('/test/n',async function (req, res) {
+
+    console.log('Document deleted successfully')
+
+})
 //end  manager
 setInterval(async function () {
     const historyBook = await managerFunctions.historyBookAll();
@@ -833,9 +840,7 @@ setInterval(async function () {
                uri: 'http://sms.parsgreen.ir/Apiv2/Message/SendOtp',
                body: JSON.stringify({
                    "Mobile": userDetaileF[0].phone,
-                   "SmsCode": `${otp}`,
-                   "TemplateID": 6,
-                   "AddName": true
+                   "msg": 'مهلت استفاده شما از کتابی که قرض گرفته اید رو به پایان است.',
                }),
                method: 'POST',
                headers: {
